@@ -1,0 +1,38 @@
+<!doctype HTML>
+
+<html>
+
+<head>
+    <title>Pacmania</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="drawing.js"></script>
+</head>
+
+<body>
+    <h1>Pac-man</h1>
+
+    <canvas id="pacmania" width="400" height="400"></canvas>
+
+    <script>
+        var canvas = document.getElementById("pacmania");
+        var context = canvas.getContext("2d");
+        draw_grid(context);
+      /*  context.beginPath();
+        context.arc(200, 200, 150, 0.2 * Math.PI, 1.8 * Math.PI);
+        context.lineTo(200, 200);
+        context.fillStyle = "yellow";
+        context.fill();
+        context.stroke(); */ // htmls code that draws a specific pacman refactored in the javascript file
+        openMouth = Math.random() * (0.2 - 0.0) + 0.0; // variables that will give a proper pacman mouth
+        closeMouth = Math.random() * (2.0 - 1.8) + 1.8;
+       // draw_pacman(200, 200, 150, openMouth, closeMouth); //calling draw_pacman funtion with given input
+
+        multiple_pacman(); // calling multiple_pacman function with no inputs
+    
+        
+    </script>
+    
+
+</body>
+
+</html>
