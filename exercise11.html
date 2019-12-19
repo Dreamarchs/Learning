@@ -1,0 +1,105 @@
+<DOCTYPE !html>
+<html>
+    <head>
+        <title>Asteroids</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="drawing.js"></script>
+        <script src="objects.js"></script>
+    </head>
+    <body>
+        <h1>Asteroids</h1>
+        <canvas id="asteroids" width="600" height="600" tabindex="1"></canvas>
+        <script>
+            'use strict';
+            var guide_on = true;
+           var canvas = document.getElementById("asteroids");
+            var context = canvas.getContext("2d");
+
+            //var mass = new Mass(10, 20, context.canvas.width/2, context.canvas.height/2);
+           // var asteroid = new Asteroid(10000, Math.random() * context.canvas.width, Math.random() * context.canvas.height);
+           var asteroids = [];
+           for (let i = 0; i < 4; i++) {
+               let asteroid = new Asteroid(
+                    2000 + Math.random() * 8000,
+                    Math.random() * context.canvas.width,
+                    Math.random() * context.canvas.height
+                    
+               );
+               asteroid.push(Math.random() * 2 * Math.PI, 2000, 60);
+               asteroid.twist((Math.random() - 0.5) * 500, 60);
+               asteroids.push(asteroid);
+           }
+           var ship = new Ship(context.canvas.width/2, context.canvas.height/2, 1000);
+          // var mass = new Mass(10, 20, context.canvas.width/2, context.canvas.height/2);
+
+           
+
+           function draw() {
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+                if (guide_on == true) {
+                 draw_grid(context);
+                 ship.draw(context, {guide:guide_on});
+                }
+                else {
+                ship.draw(context);
+                }
+                asteroids.forEach(function(asteroid) {
+                    asteroid.draw(context, guide_on);
+                })
+            }
+
+            function update(elapsed) {
+                
+                asteroids.forEach(function(asteroid) {
+                     asteroid.update(elapsed, context);
+                })
+                ship.update(elapsed, context);
+            }
+
+            var previous;
+            function frame(timestamp) {
+                if(!previous) previous = timestamp;
+                var elapsed = timestamp - previous;
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+                update(elapsed/1000);
+                draw(context);
+                previous = timestamp;
+                window.requestAnimationFrame(frame);
+            }
+            window.requestAnimationFrame(frame);
+
+            function key_handler(e, value) {
+               var nothing_handled = false;
+               switch(e.key || e.keyCode) {
+                   case "ArrowUp":
+                    case 38: 
+                    ship.thruster_on = value;
+                    break;
+                    case "ArrowLeft":
+                     case 37:
+                    ship.left_thruster = value;
+                    break;
+                    case "ArrowRight": 
+                     case 39: 
+                     ship.right_thruster = value;
+                     break;
+                     case "g": 
+                     case 71: 
+                     if(value) guide_on = !guide_on;
+                    default:
+                        nothing_handled = true;
+               }
+               if(!nothing_handled) e.preventDefault();
+           }
+           context.canvas.addEventListener("keydown", function(e) {
+               key_handler(e, true);
+           }, true);
+
+           context.canvas.addEventListener("keyup", function(e) {
+               key_handler(e, false);
+           }, true);
+           context.canvas.focus();
+        </script>
+
+        </body>
+    </html>
